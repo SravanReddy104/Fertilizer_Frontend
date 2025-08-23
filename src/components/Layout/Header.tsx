@@ -4,13 +4,11 @@ import {
   BellOutlined, 
   UserOutlined, 
   SettingOutlined,
-  LogoutOutlined,
   ReloadOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
 
 const { Header: AntHeader } = Layout;
 
@@ -22,7 +20,6 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ collapsed, onToggleSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
   const { token } = theme.useToken();
 
   const getPageTitle = (pathname: string) => {
@@ -42,23 +39,11 @@ const Header: React.FC<HeaderProps> = ({ collapsed, onToggleSidebar }) => {
       icon: <SettingOutlined />,
       label: 'Settings',
     },
-    {
-      type: 'divider',
-    },
-    {
-      key: 'logout',
-      icon: <LogoutOutlined />,
-      label: 'Logout',
-      danger: true,
-    },
   ];
 
   const onUserMenuClick: MenuProps['onClick'] = async ({ key }) => {
     if (key === 'settings') {
       navigate('/settings');
-    } else if (key === 'logout') {
-      await logout();
-      navigate('/login');
     }
   };
 
@@ -121,8 +106,8 @@ const Header: React.FC<HeaderProps> = ({ collapsed, onToggleSidebar }) => {
           <div className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded">
             <Avatar icon={<UserOutlined />} />
             <div className="hidden md:block">
-              <div className="text-sm font-medium text-gray-700">{user?.full_name || user?.email || 'User'}</div>
-              <div className="text-xs text-gray-500">{user?.role === 'admin' ? 'Administrator' : 'User'}</div>
+              <div className="text-sm font-medium text-gray-700">User</div>
+              <div className="text-xs text-gray-500">Dashboard</div>
             </div>
           </div>
         </Dropdown>

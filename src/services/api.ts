@@ -1,84 +1,15 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { Product, Sale, Purchase, Debt, DashboardStats } from '@/types';
 
 const API_BASE_URL = "http://127.0.0.1:8000";
-
-// Simple token store
-const ACCESS_KEY = 'access_token';
-const REFRESH_KEY = 'refresh_token';
-
-export const tokenStore = {
-  get access() { return localStorage.getItem(ACCESS_KEY); },
-  get refresh() { return localStorage.getItem(REFRESH_KEY); },
-  set(access?: string, refresh?: string) {
-    if (access) localStorage.setItem(ACCESS_KEY, access); else localStorage.removeItem(ACCESS_KEY);
-    if (refresh) localStorage.setItem(REFRESH_KEY, refresh); else localStorage.removeItem(REFRESH_KEY);
-  }, 
-  clear() { localStorage.removeItem(ACCESS_KEY); localStorage.removeItem(REFRESH_KEY); }
-};
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 8000,
 });
-
-// Attach Authorization header
-api.interceptors.request.use((config) => {
-  const token = tokenStore.access;
-  if (token) {
-    config.headers = config.headers || {};
-    (config.headers as any)['Authorization'] = `Bearer ${token}`;
-  }
-  return config;
-});
-
-let isRefreshing = false;
-let pendingQueue: Array<{ resolve: (t: string) => void; reject: (e: any) => void }> = [];
-
-async function refreshToken(): Promise<string> {
-  if (isRefreshing) {
-    return new Promise((resolve, reject) => pendingQueue.push({ resolve, reject }));
-  }
-  isRefreshing = true;
-  try {
-    const refresh = tokenStore.refresh;
-    if (!refresh) throw new Error('No refresh token');
-    const resp = await axios.post(`${API_BASE_URL}/api/auth/refresh`, { refresh_token: refresh });
-    const { access_token, refresh_token } = resp.data;
-    tokenStore.set(access_token, refresh_token);
-    pendingQueue.forEach(p => p.resolve(access_token));
-    pendingQueue = [];
-    return access_token;
-  } catch (e) {
-    pendingQueue.forEach(p => p.reject(e));
-    pendingQueue = [];
-    tokenStore.clear();
-    throw e;
-  } finally {
-    isRefreshing = false;
-  }
-}
-
-api.interceptors.response.use(
-  (r) => r,
-  async (error: AxiosError) => {
-    const original = error.config as AxiosRequestConfig & { _retry?: boolean };
-    if (error.response?.status === 401 && !original._retry) {
-      original._retry = true;
-      try {
-        const newAccess = await refreshToken();
-        original.headers = original.headers || {};
-        (original.headers as any)['Authorization'] = `Bearer ${newAccess}`;
-        return api(original);
-      } catch (e) {
-        // bubble up
-      }
-    }
-    return Promise.reject(error);
-  }
-);
 
 // Products API
 export const productsApi = {
@@ -228,18 +159,6 @@ export const dashboardApi = {
   
   getMonthlySummary: (year?: number, month?: number) =>
     api.get('/api/dashboard/monthly-summary', { params: { year, month } }),
-};
-
-// Auth API
-export const authApi = {
-  login: (email: string, password: string) =>
-    api.post('/api/auth/login', new URLSearchParams({ username: email, password }), {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    }),
-  register: (email: string, password: string, full_name?: string) =>
-    api.post('/api/auth/register', { email, password, full_name }),
-  me: () => api.get('/api/auth/me'),
-  logout: (access_token: string) => api.post('/api/auth/logout', { token: access_token }),
 };
 
 // Admin API

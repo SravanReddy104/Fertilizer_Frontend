@@ -9,7 +9,6 @@ import {
   DatabaseOutlined,
 } from '@ant-design/icons';
 import { TeamOutlined } from '@ant-design/icons';
-import { useAuth } from '@/context/AuthContext';
 
 const { Sider } = Layout;
 
@@ -21,7 +20,6 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
   const { token } = theme.useToken();
 
   const menuItems = [
@@ -50,7 +48,6 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
       icon: <CreditCardOutlined />,
       label: 'Debts',
     },
-    ...(user?.role === 'admin' ? [{ key: '/admin/users', icon: <TeamOutlined />, label: 'Users' }] : []),
   ];
 
   const handleMenuClick = ({ key }: { key: string }) => {

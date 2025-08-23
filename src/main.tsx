@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { ConfigProvider, theme as antdTheme } from 'antd'
 import App from './App.tsx'
 import './index.css'
-import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider, useTheme } from './context/ThemeContext'
 
 // AG Grid CSS imports
@@ -45,9 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <ThemeProvider>
         <ThemedProviders>
           <BrowserRouter>
-            <AuthProvider>
-              <App />
-            </AuthProvider>
+            <App />
           </BrowserRouter>
         </ThemedProviders>
       </ThemeProvider>
