@@ -1,12 +1,14 @@
 import React from 'react';
 import { Layout, Menu, theme } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import {
   DashboardOutlined,
   ShoppingCartOutlined,
   ShopOutlined,
   CreditCardOutlined,
   DatabaseOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -20,8 +22,9 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { token } = theme.useToken();
+  const { user } = useAuth();
 
-  const menuItems = [
+  const baseMenuItems = [
     {
       key: '/',
       icon: <DashboardOutlined />,
@@ -48,6 +51,18 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
       label: 'Debts',
     },
   ];
+
+  const adminMenuItems = [
+    {
+      key: '/users',
+      icon: <UserOutlined />,
+      label: 'User Management',
+    },
+  ];
+
+  const menuItems = user?.role === 'admin' 
+    ? [...baseMenuItems, ...adminMenuItems] 
+    : baseMenuItems;
 
   const handleMenuClick = ({ key }: { key: string }) => {
     navigate(key);

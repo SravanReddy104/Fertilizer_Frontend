@@ -5,7 +5,7 @@ import { useTheme } from '@/context/ThemeContext';
 const { Title, Text } = Typography;
 
 const Settings: React.FC = () => {
-  const { mode, setMode, toggle } = useTheme();
+  const { mode, toggle } = useTheme();
 
   return (
     <div className="p-4">

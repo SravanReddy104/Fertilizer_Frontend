@@ -11,6 +11,28 @@ const api = axios.create({
   timeout: 8000,
 });
 
+// Add token to requests
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('fertilizer_shop_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Handle token expiry
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('fertilizer_shop_token');
+      localStorage.removeItem('fertilizer_shop_token_expiry');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Products API
 export const productsApi = {
   getAll: (params?: { skip?: number; limit?: number; product_type?: string; search?: string }) =>
@@ -163,11 +185,11 @@ export const dashboardApi = {
 
 // Auth API
 export const authApi = {
-  login: (email: string, password: string) =>
-    api.post('/api/auth/login', { email, password }),
+  login: (username: string, password: string) =>
+    api.post('/api/auth/login', { username, password }),
   
-  register: (email: string, password: string, full_name?: string) =>
-    api.post('/api/auth/register', { email, password, full_name }),
+  register: (username: string, password: string, email?: string, full_name?: string) =>
+    api.post('/api/auth/register', { username, password, email, full_name }),
   
   logout: () =>
     api.post('/api/auth/logout'),
@@ -182,6 +204,8 @@ export const authApi = {
 // Admin API
 export const adminApi = {
   listUsers: () => api.get('/api/admin/users'),
+  createUser: (userData: { username: string; password: string; email?: string; full_name?: string; role: 'admin' | 'user' }) => 
+    api.post('/api/admin/users', userData),
   setRole: (userId: number, role: 'admin' | 'user') => api.patch(`/api/admin/users/${userId}/role`, { role }),
   setActive: (userId: number, is_active: boolean) => api.patch(`/api/admin/users/${userId}/active`, { is_active }),
   deleteUser: (userId: number) => api.delete(`/api/admin/users/${userId}`),

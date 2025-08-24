@@ -26,33 +26,33 @@ export const useRealTimeUpdates = ({ enabled = true }: UseRealTimeUpdatesProps =
     // Set up polling interval
     intervalRef.current = setInterval(pollForUpdates, 30000);
 
-    // Also check for low stock products every minute
-    const checkLowStock = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products/low-stock/`);
-        if (response.ok) {
-          const lowStockProducts = await response.json();
-          if (lowStockProducts.length > 0) {
-            message.warning({
-              content: `${lowStockProducts.length} products are running low on stock!`,
-              duration: 5,
-              key: 'low-stock-warning'
-            });
-          }
-        }
-      } catch (error) {
-        console.error('Error checking low stock:', error);
-      }
-    };
+    // Low stock checking disabled to reduce API calls
+    // const checkLowStock = async () => {
+    //   try {
+    //     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products/low-stock/`);
+    //     if (response.ok) {
+    //       const lowStockProducts = await response.json();
+    //       if (lowStockProducts.length > 0) {
+    //         message.warning({
+    //           content: `${lowStockProducts.length} products are running low on stock!`,
+    //           duration: 5,
+    //           key: 'low-stock-warning'
+    //         });
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error('Error checking low stock:', error);
+    //   }
+    // };
 
-    const lowStockInterval = setInterval(checkLowStock, 60000);
+    // const lowStockInterval = setInterval(checkLowStock, 60000);
 
     // Cleanup
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-      clearInterval(lowStockInterval);
+      // clearInterval(lowStockInterval);
     };
   }, [enabled, queryClient]);
 
