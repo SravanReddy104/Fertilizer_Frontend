@@ -172,7 +172,7 @@ const Purchases: React.FC = () => {
     {
       title: 'Product',
       dataIndex: 'product_id',
-      render: (value: number, record: PurchaseItem, index: number) => (
+      render: (value: number, _record: PurchaseItem, index: number) => (
         <Select
           value={value || undefined}
           placeholder="Select product"
@@ -190,7 +190,7 @@ const Purchases: React.FC = () => {
     {
       title: 'Quantity',
       dataIndex: 'quantity',
-      render: (value: number, record: PurchaseItem, index: number) => (
+      render: (value: number, _record: PurchaseItem, index: number) => (
         <InputNumber
           value={value}
           min={0.01}
@@ -202,7 +202,7 @@ const Purchases: React.FC = () => {
     {
       title: 'Unit Price',
       dataIndex: 'unit_price',
-      render: (value: number, record: PurchaseItem, index: number) => (
+      render: (value: number, _record: PurchaseItem, index: number) => (
         <InputNumber
           value={value}
           min={0}
@@ -219,7 +219,7 @@ const Purchases: React.FC = () => {
     },
     {
       title: 'Action',
-      render: (text: any, record: PurchaseItem, index: number) => (
+      render: (_text: any, _record: PurchaseItem, index: number) => (
         <Button 
           type="text" 
           danger 
@@ -316,7 +316,7 @@ const Purchases: React.FC = () => {
             dataSource={purchaseItems}
             columns={itemColumns}
             pagination={false}
-            rowKey={(record, index) => index!}
+            rowKey={(_record, index) => index!}
             size="small"
           />
 

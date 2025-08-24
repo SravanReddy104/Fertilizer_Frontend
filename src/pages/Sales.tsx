@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Card, Button, Modal, Form, Input, Select, InputNumber, message, Space, Table, Divider } from 'antd';
-import { PlusOutlined, DeleteOutlined, PaymentOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { salesApi, productsApi } from '@/services/api';
-import { Sale, Product, GridColumn, GridAction, SaleItem } from '@/types';
+import { Sale, GridColumn, GridAction, SaleItem } from '@/types';
 import DataGrid from '@/components/DataGrid/DataGrid';
 
 const { Option } = Select;
@@ -172,7 +172,7 @@ const Sales: React.FC = () => {
     {
       title: 'Product',
       dataIndex: 'product_id',
-      render: (value: number, record: SaleItem, index: number) => (
+      render: (value: number, _record: SaleItem, index: number) => (
         <Select
           value={value || undefined}
           placeholder="Select product"
@@ -190,7 +190,7 @@ const Sales: React.FC = () => {
     {
       title: 'Quantity',
       dataIndex: 'quantity',
-      render: (value: number, record: SaleItem, index: number) => (
+      render: (value: number, _record: SaleItem, index: number) => (
         <InputNumber
           value={value}
           min={0.01}
@@ -202,7 +202,7 @@ const Sales: React.FC = () => {
     {
       title: 'Unit Price',
       dataIndex: 'unit_price',
-      render: (value: number, record: SaleItem, index: number) => (
+      render: (value: number, _record: SaleItem, index: number) => (
         <InputNumber
           value={value}
           min={0}
@@ -219,7 +219,7 @@ const Sales: React.FC = () => {
     },
     {
       title: 'Action',
-      render: (text: any, record: SaleItem, index: number) => (
+      render: (_text: any, _record: SaleItem, index: number) => (
         <Button 
           type="text" 
           danger 
@@ -318,7 +318,7 @@ const Sales: React.FC = () => {
             dataSource={saleItems}
             columns={itemColumns}
             pagination={false}
-            rowKey={(record, index) => index!}
+            rowKey={(_record, index) => index!}
             size="small"
           />
 

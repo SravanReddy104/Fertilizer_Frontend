@@ -8,7 +8,6 @@ import {
   CreditCardOutlined,
   DatabaseOutlined,
 } from '@ant-design/icons';
-import { TeamOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 

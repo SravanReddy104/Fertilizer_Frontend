@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Button, Modal, Form, Input, InputNumber, DatePicker, Select, message, Space } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, PaymentOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { debtsApi } from '@/services/api';
 import { Debt, GridColumn, GridAction } from '@/types';

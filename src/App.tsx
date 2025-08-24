@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Layout, theme } from 'antd';
 import Sidebar from './components/Layout/Sidebar';
 import Header from './components/Layout/Header';
@@ -18,7 +18,6 @@ function App() {
   // Enable real-time updates
   useRealTimeUpdates({ enabled: false});
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const location = useLocation();
   const isAuthRoute = false;
   const { token } = theme.useToken();
 

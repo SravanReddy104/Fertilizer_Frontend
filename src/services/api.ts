@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Product, Sale, Purchase, Debt, DashboardStats } from '@/types';
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://fertilizer-backend-a9yy.onrender.com";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -159,6 +159,24 @@ export const dashboardApi = {
   
   getMonthlySummary: (year?: number, month?: number) =>
     api.get('/api/dashboard/monthly-summary', { params: { year, month } }),
+};
+
+// Auth API
+export const authApi = {
+  login: (email: string, password: string) =>
+    api.post('/api/auth/login', { email, password }),
+  
+  register: (email: string, password: string, full_name?: string) =>
+    api.post('/api/auth/register', { email, password, full_name }),
+  
+  logout: () =>
+    api.post('/api/auth/logout'),
+  
+  getCurrentUser: () =>
+    api.get('/api/auth/me'),
+  
+  refreshToken: () =>
+    api.post('/api/auth/refresh'),
 };
 
 // Admin API
