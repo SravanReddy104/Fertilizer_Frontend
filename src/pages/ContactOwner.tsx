@@ -39,7 +39,7 @@ const ContactOwner: React.FC = () => {
               <div>
                 <Text strong>Contact Number</Text>
                 <br />
-                <Text copyable className="text-lg">+91 XXXXXXXXXX</Text>
+                <Text copyable className="text-lg">+91 9390321057</Text>
               </div>
             </div>
 

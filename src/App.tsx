@@ -53,10 +53,10 @@ const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 const AppLayout: React.FC = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { token } = theme.useToken();
-  const { isAuthenticated } = useAuth();
+  // const { isAuthenticated } = useAuth();
 
   // Enable real-time updates only when authenticated
-  useRealTimeUpdates({ enabled: isAuthenticated });
+  useRealTimeUpdates({ enabled: false });
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

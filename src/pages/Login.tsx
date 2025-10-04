@@ -21,7 +21,21 @@ const Login: React.FC = () => {
       navigate(from, { replace: true });
     } catch (error: any) {
       console.error('Login error:', error);
-      message.error(error?.response?.data?.detail || 'Login failed');
+      const errorMessage = error?.response?.data?.detail || 'Login failed';
+      
+      // Check if it's an authentication error (401 or invalid credentials)
+      if (error?.response?.status === 401 || 
+          errorMessage.toLowerCase().includes('invalid') ||
+          errorMessage.toLowerCase().includes('incorrect') ||
+          errorMessage.toLowerCase().includes('unauthorized')) {
+        message.error('Invalid credentials. Redirecting to contact owner page...');
+        // Redirect to contact owner page after a short delay
+        setTimeout(() => {
+          navigate('/contact-owner', { replace: true });
+        }, 2000);
+      } else {
+        message.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
